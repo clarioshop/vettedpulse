@@ -99,5 +99,34 @@
     <script src="js/utils/validator.js"></script>
     <script src="js/utils/clientData.js"></script>
     <script src="js/auth.js"></script>
+    <script>
+// SUPER SIMPLE DIAGNOSTIC
+console.log('🔍 DIAGNOSTIC START');
+
+// Check if each file loaded
+console.log('CONFIG loaded:', typeof CONFIG !== 'undefined');
+console.log('Sanitizer loaded:', typeof Sanitizer !== 'undefined');
+console.log('Validator loaded:', typeof Validator !== 'undefined');
+console.log('ClientData loaded:', typeof ClientData !== 'undefined');
+console.log('Auth loaded:', typeof Auth !== 'undefined');
+
+// Test basic function
+if (typeof CONFIG !== 'undefined') {
+    console.log('✅ CONFIG.APPS_SCRIPT_URL:', CONFIG.APPS_SCRIPT_URL);
+}
+
+// Test if form exists
+const form = document.getElementById('loginForm');
+console.log('Login form found:', form !== null);
+
+// Add simple test handler
+if (form) {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        console.log('✅ TEST: Form submit intercepted!');
+        alert('Form is working! Now we need to find why auth.js is not working.');
+    });
+}
+</script>
 </body>
 </html>
