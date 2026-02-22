@@ -2,6 +2,16 @@
  * VettedPulse Authentication Module
  * Handles signup, login, verification, and session management
  */
+// ===== DEBUG: Track all network requests =====
+const originalFetch = window.fetch;
+window.fetch = function(...args) {
+    console.log('🌐 FETCH REQUEST:', args[0]);
+    return originalFetch.apply(this, args);
+};
+
+console.log('🔍 DEBUG: Auth.js loaded');
+console.log('🔍 Current origin:', window.location.origin);
+console.log('🔍 APPS_SCRIPT_URL:', CONFIG?.APPS_SCRIPT_URL || 'CONFIG not loaded yet');
 
 class Auth {
     constructor() {
