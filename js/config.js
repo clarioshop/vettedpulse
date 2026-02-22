@@ -13,7 +13,7 @@ const CONFIG = {
      * Format: https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
      * @type {string}
      */
-    APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyU976uo4QYrBGiFax3xYodpFMaXl4LVGYDDsT4igJfje14sUhYh7G37dqInLM9CCcR/exec',
+    APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxi5hUb5Dzrr8EpZ6w1n8NUNfrgo6xjXJVwfeUUyykCujCWbagbX0dkfxV4DuFVSSko/exec',
     
     /**
      * Site URL (auto-detected)
