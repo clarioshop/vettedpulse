@@ -2,6 +2,26 @@
  * VettedPulse Authentication Module
  * Handles signup, login, verification, and session management
  */
+// ===== DEBUG: Find what's loading config.json =====
+console.log('🔍 All scripts on page:');
+document.querySelectorAll('script').forEach(script => {
+    if (script.src) {
+        console.log('  📜 Script:', script.src);
+    } else if (script.textContent.includes('config.json')) {
+        console.log('  ⚠️ Inline script contains config.json:', script.textContent.substring(0, 100));
+    }
+});
+
+// Monitor all network requests
+const observer = new PerformanceObserver((list) => {
+    list.getEntries().forEach(entry => {
+        if (entry.name.includes('config.json')) {
+            console.log('🚨 config.json requested by:', entry.initiatorType, entry.name);
+            console.trace('Trace:');
+        }
+    });
+});
+observer.observe({ entryTypes: ['resource'] });
 // ===== DEBUG: Track all network requests =====
 const originalFetch = window.fetch;
 window.fetch = function(...args) {
