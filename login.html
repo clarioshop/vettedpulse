@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://api.ipify.org https://script.google.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src 'self' https://fonts.gstatic.com;
+                   connect-src 'self' https://api.ipify.org https://script.google.com;
+                   img-src 'self' data:;
+                   frame-src 'self';
+                   base-uri 'self';
+                   form-action 'self';
+                   frame-ancestors 'none';
+                   block-all-mixed-content;">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <title>Login - VettedPulse</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">Vetted<span>Pulse</span></a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="signup.html" class="btn btn-primary">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Form -->
+    <div class="auth-page">
+        <div class="container">
+            <div class="form-container">
+                <h1 class="form-title">Welcome Back</h1>
+                
+                <!-- Alert Container for messages -->
+                <div id="alertContainer"></div>
+                
+                <!-- System Status Alert -->
+                <div id="systemStatusAlert"></div>
+                
+                <!-- Login Form -->
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" required 
+                               maxlength="100" autocomplete="email" placeholder="your@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" required 
+                               maxlength="50" autocomplete="current-password" placeholder="••••••••">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                </form>
+                
+                <!-- Rate Limit Info -->
+                <div class="rate-limit-info" style="text-align: center; margin-top: 1rem; font-size: 0.8rem; color: var(--gray-500);">
+                    5 attempts per 15 minutes max
+                </div>
+                
+                <!-- Signup Link -->
+                <div class="auth-links" style="text-align: center; margin-top: 1.5rem;">
+                    Don't have an account? <a href="signup.html">Sign up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>&copy; 2024 VettedPulse</div>
+                <div class="footer-links">
+                    <a href="terms.html">Terms</a>
+                    <a href="privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/utils/sanitizer.js"></script>
+    <script src="js/utils/validator.js"></script>
+    <script src="js/utils/clientData.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

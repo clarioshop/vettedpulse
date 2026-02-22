@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://api.ipify.org https://script.google.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src 'self' https://fonts.gstatic.com;
+                   connect-src 'self' https://api.ipify.org https://script.google.com;
+                   img-src 'self' data:;
+                   frame-src 'self';
+                   base-uri 'self';
+                   form-action 'self';
+                   frame-ancestors 'none';
+                   block-all-mixed-content;">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
+    <title>Join Waitlist - VettedPulse</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .waitlist-container {
+            min-height: calc(100vh - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .waitlist-card {
+            max-width: 500px;
+            width: 100%;
+            background: var(--gray-100);
+            border: 1px solid var(--heading-yellow);
+            border-radius: 0.5rem;
+            padding: 3rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .waitlist-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .waitlist-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--heading-yellow);
+        }
+        
+        .waitlist-description {
+            color: var(--gray-500);
+            margin-bottom: 2rem;
+        }
+        
+        .capacity-info {
+            background: var(--gray-200);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        
+        .capacity-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--gray-300);
+        }
+        
+        .capacity-row:last-child {
+            border-bottom: none;
+        }
+        
+        .capacity-label {
+            color: var(--gray-500);
+        }
+        
+        .capacity-value {
+            color: var(--heading-yellow);
+            font-weight: 600;
+        }
+        
+        .capacity-row.warning .capacity-value {
+            color: var(--alert-red);
+        }
+        
+        .waitlist-form {
+            margin-top: 2rem;
+        }
+        
+        .waitlist-input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gray-200);
+            border: 1px solid var(--gray-300);
+            border-radius: 0.375rem;
+            color: var(--text-white);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .waitlist-input:focus {
+            outline: none;
+            border-color: var(--heading-yellow);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+        }
+        
+        .waitlist-input::placeholder {
+            color: var(--gray-500);
+        }
+        
+        .estimated-wait {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-300);
+        }
+        
+        .wait-time {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--success-green);
+            margin: 0.5rem 0;
+        }
+        
+        .reason-badge {
+            background: var(--alert-red);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .tier-selector {
+            margin-bottom: 1rem;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: var(--gray-500);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+        
+        .back-link:hover {
+            color: var(--heading-yellow);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">Vetted<span>Pulse</span></a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="login.html" class="btn btn-outline">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Waitlist Content -->
+    <div class="waitlist-container">
+        <div class="waitlist-card">
+            <div class="waitlist-icon">⏳</div>
+            <h1 class="waitlist-title" id="waitlistTitle">High Demand!</h1>
+            <p class="waitlist-description" id="waitlistDescription">
+                We're currently at capacity to ensure quality for our existing affiliates.
+            </p>
+            
+            <!-- Reason Display (hidden by default) -->
+            <div id="reasonDisplay" class="reason-badge" style="display: none;"></div>
+            
+            <!-- Capacity Information -->
+            <div class="capacity-info" id="capacityInfo">
+                <div class="capacity-row">
+                    <span class="capacity-label">Loading capacity...</span>
+                </div>
+            </div>
+            
+            <!-- Waitlist Form -->
+            <form class="waitlist-form" id="waitlistForm">
+                <input type="email" class="waitlist-input" id="waitlistEmail" 
+                       placeholder="Enter your email" required>
+                
+                <select class="waitlist-input" id="tierSelect">
+                    <option value="NEWBIE">Newbie Tier (Free)</option>
+                    <option value="ACTIVE">Active Tier ($29/month)</option>
+                    <option value="PRO">Pro Tier ($99/month)</option>
+                    <option value="ELITE">Elite Tier ($299/month)</option>
+                </select>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Join Waitlist</button>
+            </form>
+            
+            <!-- Estimated Wait Time -->
+            <div class="estimated-wait">
+                <div class="text-muted">Estimated wait time</div>
+                <div class="wait-time" id="waitTime">2-4 weeks</div>
+                <div class="text-muted" style="font-size: 0.875rem;">
+                    We'll email you immediately when a spot opens
+                </div>
+            </div>
+            
+            <!-- Back to Home Link -->
+            <a href="/" class="back-link">← Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>&copy; 2024 VettedPulse</div>
+                <div class="footer-links">
+                    <a href="terms.html">Terms</a>
+                    <a href="privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/utils/sanitizer.js"></script>
+    <script src="js/utils/validator.js"></script>
+    <script src="js/utils/clientData.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const reason = urlParams.get('reason');
+            const tier = urlParams.get('tier');
+            
+            // Display reason if provided
+            if (reason) {
+                document.getElementById('reasonDisplay').style.display = 'block';
+                let reasonText = '';
+                
+                switch(reason) {
+                    case 'email-quota':
+                        reasonText = '📧 High email volume - manual verification in place';
+                        break;
+                    case 'capacity':
+                        reasonText = '📊 All tiers at capacity';
+                        break;
+                    case 'maintenance':
+                        reasonText = '🔧 Scheduled maintenance';
+                        break;
+                    default:
+                        reasonText = 'System at capacity';
+                }
+                
+                document.getElementById('reasonDisplay').textContent = reasonText;
+            }
+            
+            // Preselect tier if specified
+            if (tier) {
+                document.getElementById('tierSelect').value = tier;
+            }
+            
+            // Load capacity information
+            try {
+                const response = await fetch(
+                    `${CONFIG.APPS_SCRIPT_URL}?action=getCapacity&_=${Date.now()}`
+                );
+                const data = await response.json();
+                
+                if (data.success) {
+                    const capacityHtml = Object.entries(data.capacity.tiers)
+                        .map(([tier, info]) => {
+                            const percentFull = (info.used / info.limit) * 100;
+                            const warningClass = info.available < 10 ? 'warning' : '';
+                            
+                            return `
+                                <div class="capacity-row ${warningClass}">
+                                    <span class="capacity-label">${tier}:</span>
+                                    <span class="capacity-value">${info.used}/${info.limit} (${info.available} left)</span>
+                                </div>
+                            `;
+                        })
+                        .join('');
+                    
+                    document.getElementById('capacityInfo').innerHTML = capacityHtml;
+                    
+                    // Update wait time based on availability
+                    const totalAvailable = Object.values(data.capacity.tiers)
+                        .reduce((sum, info) => sum + info.available, 0);
+                    
+                    if (totalAvailable === 0) {
+                        document.getElementById('waitTime').textContent = '3-6 weeks';
+                    } else if (totalAvailable < 20) {
+                        document.getElementById('waitTime').textContent = '1-2 weeks';
+                    } else {
+                        document.getElementById('waitTime').textContent = '2-4 weeks';
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load capacity:', error);
+                document.getElementById('capacityInfo').innerHTML = `
+                    <div class="capacity-row">
+                        <span class="capacity-label">Unable to load capacity</span>
+                    </div>
+                `;
+            }
+            
+            // Handle form submission
+            document.getElementById('waitlistForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const email = Sanitizer.sanitizeEmail(document.getElementById('waitlistEmail').value);
+                const selectedTier = document.getElementById('tierSelect').value;
+                
+                // Validate email
+                if (!Validator.isEmail(email)) {
+                    alert('Please enter a valid email address');
+                    return;
+                }
+                
+                try {
+                    // Get client data for real IP
+                    const clientData = await ClientData.getClientData();
+                    
+                    // Submit to waitlist
+                    const response = await fetch(
+                        `${CONFIG.APPS_SCRIPT_URL}?action=joinWaitlist`, {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                email: email,
+                                tier: selectedTier,
+                                ip: clientData.ip,
+                                ua: clientData.ua,
+                                timestamp: new Date().toISOString()
+                            })
+                        }
+                    );
+                    
+                    // Show success message
+                    alert('Thanks for joining! We\'ll notify you when spots open.');
+                    
+                    // Redirect to home after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 2000);
+                    
+                } catch (error) {
+                    console.error('Waitlist submission failed:', error);
+                    alert('Failed to join waitlist. Please try again later.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

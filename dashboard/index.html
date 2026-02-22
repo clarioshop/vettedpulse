@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://api.ipify.org https://script.google.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src 'self' https://fonts.gstatic.com;
+                   connect-src 'self' https://api.ipify.org https://script.google.com;
+                   img-src 'self' data: https:;
+                   frame-src 'self';
+                   base-uri 'self';
+                   form-action 'self';
+                   frame-ancestors 'none';
+                   block-all-mixed-content;">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
+    <title>Dashboard - VettedPulse</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="/dashboard/" class="logo">Vetted<span>Pulse</span></a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="/dashboard/" class="active">
+                    <span class="nav-icon">📊</span>
+                    <span>Overview</span>
+                </a>
+                <a href="/dashboard/products.html">
+                    <span class="nav-icon">🛍️</span>
+                    <span>Products</span>
+                </a>
+                <a href="/dashboard/leaderboard.html">
+                    <span class="nav-icon">🏆</span>
+                    <span>Leaderboard</span>
+                </a>
+                <a href="/dashboard/settings.html">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="tier-info" id="tierInfo">
+                    <div class="tier-name">Loading...</div>
+                    <div class="tier-progress">Please wait</div>
+                </div>
+                <button class="btn btn-outline" style="width: 100%;" onclick="logout()">Logout</button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- System Status Alert -->
+            <div id="systemStatusAlert" class="system-status-bar" style="display: none;"></div>
+            
+            <header class="content-header">
+                <h1>Dashboard Overview</h1>
+                <p id="currentDate"></p>
+            </header>
+            
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Clicks</div>
+                    <div class="stat-value" id="totalClicks">-</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-label">Total Sales</div>
+                    <div class="stat-value" id="totalSales">-</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-label">Commission Rate</div>
+                    <div class="stat-value" id="commissionRate">-</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-label">Lifetime Commission</div>
+                    <div class="stat-value" id="lifetimeCommission">-</div>
+                </div>
+            </div>
+            
+            <!-- Tier Progress Section -->
+            <div class="tier-progress-section">
+                <div class="tier-header">
+                    <h2>Your Progress</h2>
+                    <div>
+                        <span class="tier-current" id="currentTier">Newbie</span>
+                        <span class="tier-next" id="nextTier">→ Scout</span>
+                    </div>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="tierProgress" style="width: 0%"></div>
+                </div>
+                
+                <div class="tier-requirements">
+                    <span id="currentSales">0 sales</span>
+                    <span id="nextRequirement">10 sales needed</span>
+                </div>
+            </div>
+            
+            <!-- Daily Capacity -->
+            <div class="capacity-panel">
+                <h3>Today's Capacity</h3>
+                
+                <div class="capacity-item">
+                    <span class="capacity-label">Clicks Today:</span>
+                    <span class="capacity-value" id="clicksToday">0</span>
+                </div>
+                
+                <div class="capacity-item">
+                    <span class="capacity-label">Clicks Remaining:</span>
+                    <span class="capacity-value" id="clicksRemaining">0</span>
+                </div>
+                
+                <div class="capacity-bar-container">
+                    <div class="capacity-bar">
+                        <div class="capacity-fill" id="clickCapacityBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="capacity-item">
+                    <span class="capacity-label">Sales Today:</span>
+                    <span class="capacity-value" id="salesToday">0</span>
+                </div>
+                
+                <div class="capacity-item">
+                    <span class="capacity-label">Conversion Rate:</span>
+                    <span class="capacity-value" id="conversionRate">0%</span>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="card">
+                <h3>Recent Activity</h3>
+                <div class="activity-list" id="recentActivity">
+                    <p class="text-muted">Loading activity...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="../js/config.js"></script>
+    <script src="../js/utils/sanitizer.js"></script>
+    <script src="../js/utils/validator.js"></script>
+    <script src="../js/utils/clientData.js"></script>
+    <script src="../js/utils/securityHeaders.js"></script>
+    <script src="js/tierManager.js"></script>
+    <script src="js/capacityMonitor.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

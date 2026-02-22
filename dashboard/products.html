@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://api.ipify.org https://script.google.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src 'self' https://fonts.gstatic.com;
+                   connect-src 'self' https://api.ipify.org https://script.google.com;
+                   img-src 'self' data: https:;
+                   frame-src 'self';
+                   base-uri 'self';
+                   form-action 'self';
+                   frame-ancestors 'none';
+                   block-all-mixed-content;">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
+    <title>Products - VettedPulse</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="/dashboard/" class="logo">Vetted<span>Pulse</span></a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="/dashboard/">
+                    <span class="nav-icon">📊</span>
+                    <span>Overview</span>
+                </a>
+                <a href="/dashboard/products.html" class="active">
+                    <span class="nav-icon">🛍️</span>
+                    <span>Products</span>
+                </a>
+                <a href="/dashboard/leaderboard.html">
+                    <span class="nav-icon">🏆</span>
+                    <span>Leaderboard</span>
+                </a>
+                <a href="/dashboard/settings.html">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="tier-info" id="tierInfo">
+                    <div class="tier-name">Loading...</div>
+                    <div class="tier-progress">Please wait</div>
+                </div>
+                <button class="btn btn-outline" style="width: 100%;" onclick="logout()">Logout</button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- System Status Alert -->
+            <div id="systemStatusAlert" class="system-status-bar" style="display: none;"></div>
+            
+            <header class="content-header">
+                <h1>Products</h1>
+                <p>Choose products to promote and copy your unique affiliate links</p>
+            </header>
+            
+            <!-- Capacity Warning -->
+            <div id="capacityWarning" class="alert alert-warning" style="display: none;">
+                ⚠️ You're approaching your daily click limit. Upgrade your tier for more clicks.
+            </div>
+            
+            <!-- Products Grid -->
+            <div id="productsContainer" class="products-grid">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p class="text-muted">Loading products...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="../js/config.js"></script>
+    <script src="../js/utils/sanitizer.js"></script>
+    <script src="../js/utils/validator.js"></script>
+    <script src="../js/utils/clientData.js"></script>
+    <script src="../js/utils/securityHeaders.js"></script>
+    <script src="js/tierManager.js"></script>
+    <script src="js/capacityMonitor.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

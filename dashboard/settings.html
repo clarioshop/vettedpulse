@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://api.ipify.org https://script.google.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src 'self' https://fonts.gstatic.com;
+                   connect-src 'self' https://api.ipify.org https://script.google.com;
+                   img-src 'self' data: https:;
+                   frame-src 'self';
+                   base-uri 'self';
+                   form-action 'self';
+                   frame-ancestors 'none';
+                   block-all-mixed-content;">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
+    <title>Settings - VettedPulse</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="/dashboard/" class="logo">Vetted<span>Pulse</span></a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="/dashboard/">
+                    <span class="nav-icon">📊</span>
+                    <span>Overview</span>
+                </a>
+                <a href="/dashboard/products.html">
+                    <span class="nav-icon">🛍️</span>
+                    <span>Products</span>
+                </a>
+                <a href="/dashboard/leaderboard.html">
+                    <span class="nav-icon">🏆</span>
+                    <span>Leaderboard</span>
+                </a>
+                <a href="/dashboard/settings.html" class="active">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="tier-info" id="tierInfo">
+                    <div class="tier-name">Loading...</div>
+                    <div class="tier-progress">Please wait</div>
+                </div>
+                <button class="btn btn-outline" style="width: 100%;" onclick="logout()">Logout</button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- System Status Alert -->
+            <div id="systemStatusAlert" class="system-status-bar" style="display: none;"></div>
+            
+            <header class="content-header">
+                <h1>Settings</h1>
+                <p>Manage your account preferences</p>
+            </header>
+            
+            <!-- Alert Container -->
+            <div id="alertContainer"></div>
+            
+            <!-- Affiliate Information -->
+            <div class="settings-section">
+                <h2>Affiliate Information</h2>
+                <div class="info-display">
+                    <div class="info-row">
+                        <span class="info-label">Affiliate ID:</span>
+                        <span class="info-value" id="affiliateID">-</span>
+                        <button class="copy-btn" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="copyAffiliateID()">Copy</button>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Current Tier:</span>
+                        <span class="info-value" id="currentTier">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Commission Multiplier:</span>
+                        <span class="info-value" id="commissionMultiplier">1.0x</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Daily Click Limit:</span>
+                        <span class="info-value" id="clickLimit">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Member Since:</span>
+                        <span class="info-value" id="memberSince">-</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Update Profile -->
+            <div class="settings-section">
+                <h2>Update Profile</h2>
+                <form id="updateProfileForm">
+                    <div class="form-group">
+                        <label for="updateName">Full Name</label>
+                        <input type="text" class="form-control" id="updateName" 
+                               maxlength="50" pattern="[A-Za-z\s\-']+" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="updateEmail">Email</label>
+                        <input type="email" class="form-control" id="updateEmail" 
+                               maxlength="100" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+            </div>
+            
+            <!-- Change Password -->
+            <div class="settings-section">
+                <h2>Change Password</h2>
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" class="form-control" id="currentPassword" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" class="form-control" id="newPassword" required
+                               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}">
+                        <small class="text-muted">Min 8 chars, 1 number, 1 uppercase, 1 special</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </form>
+            </div>
+            
+            <!-- Referral Program -->
+            <div class="settings-section">
+                <h2>Referral Program</h2>
+                <p class="text-muted">Share your referral link and earn 10% of their first month's fees!</p>
+                
+                <div class="info-display" style="margin-top: 1rem;">
+                    <div class="info-row">
+                        <span class="info-label">Your Referral Link:</span>
+                        <span class="info-value" id="referralLink">-</span>
+                        <button class="copy-btn" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="copyReferralLink()">Copy</button>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Total Referrals:</span>
+                        <span class="info-value" id="totalReferrals">0</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Referral Earnings:</span>
+                        <span class="info-value" id="referralEarnings">$0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Danger Zone -->
+            <div class="settings-section" style="border-color: var(--alert-red);">
+                <h2 style="color: var(--alert-red);">Danger Zone</h2>
+                
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-outline" style="border-color: var(--alert-red); color: var(--alert-red);" 
+                            onclick="exportData()">
+                        📥 Export My Data
+                    </button>
+                    
+                    <button class="btn btn-danger" onclick="confirmDeactivate()">
+                        ⚠️ Deactivate Account
+                    </button>
+                </div>
+                
+                <p class="text-muted" style="margin-top: 1rem; font-size: 0.875rem;">
+                    Export your data before deactivating. Deactivated accounts can be restored within 30 days.
+                </p>
+            </div>
+        </main>
+    </div>
+    
+    <script src="../js/config.js"></script>
+    <script src="../js/utils/sanitizer.js"></script>
+    <script src="../js/utils/validator.js"></script>
+    <script src="../js/utils/clientData.js"></script>
+    <script src="../js/utils/securityHeaders.js"></script>
+    <script src="js/tierManager.js"></script>
+    <script src="js/capacityMonitor.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://api.ipify.org https://script.google.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src 'self' https://fonts.gstatic.com;
+                   connect-src 'self' https://api.ipify.org https://script.google.com;
+                   img-src 'self' data:;
+                   frame-src 'self';
+                   base-uri 'self';
+                   form-action 'self';
+                   frame-ancestors 'none';
+                   block-all-mixed-content;">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <title>Sign Up - VettedPulse</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">Vetted<span>Pulse</span></a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="login.html" class="btn btn-outline">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Signup Form -->
+    <div class="auth-page">
+        <div class="container">
+            <div class="form-container">
+                <h1 class="form-title">Become an Affiliate</h1>
+                
+                <!-- Alert Container -->
+                <div id="alertContainer"></div>
+                
+                <!-- System Status Alert -->
+                <div id="systemStatusAlert"></div>
+                
+                <!-- Quota Alert -->
+                <div id="quotaAlert"></div>
+                
+                <!-- Signup Form -->
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" class="form-control" id="name" required 
+                               maxlength="50" pattern="[A-Za-z\s\-']+" 
+                               title="Letters, spaces, hyphens and apostrophes only"
+                               placeholder="John Doe">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" required 
+                               maxlength="100" autocomplete="email" 
+                               placeholder="john@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" required 
+                               maxlength="50" autocomplete="new-password"
+                               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}"
+                               title="Minimum 8 characters: at least one number, one uppercase, one lowercase, and one special character"
+                               placeholder="••••••••">
+                        <small style="color: var(--gray-500); font-size: 0.8rem;">
+                            Min 8 chars: 1 number, 1 uppercase, 1 special (!@#$%^&*)
+                        </small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Select Tier</label>
+                        <div id="tierOptions" class="tier-selector">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Sign Up</button>
+                </form>
+                
+                <!-- Verification Section (hidden by default) -->
+                <div id="verificationSection" style="display: none; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--gray-300);">
+                    <h3 style="margin-bottom: 1rem; color: var(--heading-yellow);">Verify Your Email</h3>
+                    <p style="color: var(--gray-500); margin-bottom: 1rem;">
+                        We've sent an 8-digit code to your email. Enter it below to activate your account.
+                    </p>
+                    
+                    <form id="verificationForm">
+                        <div class="form-group">
+                            <label for="verificationCode">Verification Code</label>
+                            <input type="text" class="form-control" id="verificationCode" 
+                                   maxlength="8" pattern="\d{8}" 
+                                   title="8-digit code" required
+                                   placeholder="12345678">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Verify Account</button>
+                    </form>
+                    
+                    <p style="text-align: center; margin-top: 1rem; font-size: 0.8rem; color: var(--gray-500);">
+                        Didn't receive code? Check spam or <a href="#" id="resendCode" style="color: var(--heading-yellow);">resend</a>
+                    </p>
+                </div>
+                
+                <!-- Manual Verification Notice (hidden by default) -->
+                <div id="manualVerificationNotice" style="display: none; margin-top: 1rem;">
+                    <div class="alert alert-warning">
+                        <strong>High Traffic Notice</strong>
+                        <p id="manualMessage">Due to high demand, verification may take up to 24 hours. You'll receive an email when verified.</p>
+                    </div>
+                </div>
+                
+                <!-- Login Link -->
+                <div class="auth-links" style="text-align: center; margin-top: 1.5rem;">
+                    Already have an account? <a href="login.html">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>&copy; 2024 VettedPulse</div>
+                <div class="footer-links">
+                    <a href="terms.html">Terms</a>
+                    <a href="privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/utils/sanitizer.js"></script>
+    <script src="js/utils/validator.js"></script>
+    <script src="js/utils/clientData.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

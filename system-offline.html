@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://api.ipify.org https://script.google.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src 'self' https://fonts.gstatic.com;
+                   connect-src 'self' https://api.ipify.org https://script.google.com;
+                   img-src 'self' data:;
+                   frame-src 'self';
+                   base-uri 'self';
+                   form-action 'self';
+                   frame-ancestors 'none';
+                   block-all-mixed-content;">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
+    <title>System Maintenance - VettedPulse</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .offline-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #000000 0%, #1a0000 100%);
+            padding: 1rem;
+        }
+        
+        .offline-card {
+            max-width: 500px;
+            width: 100%;
+            background: var(--gray-100);
+            border: 2px solid var(--alert-red);
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 65, 54, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 30px rgba(255, 65, 54, 0.3); }
+            50% { box-shadow: 0 0 60px rgba(255, 65, 54, 0.6); }
+            100% { box-shadow: 0 0 30px rgba(255, 65, 54, 0.3); }
+        }
+        
+        .offline-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            color: var(--alert-red);
+        }
+        
+        .offline-title {
+            font-size: 2.5rem;
+            color: var(--alert-red);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .offline-reason {
+            background: var(--gray-200);
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            margin: 2rem 0;
+            color: var(--gray-800);
+            font-size: 1.1rem;
+            border-left: 4px solid var(--alert-red);
+            text-align: left;
+        }
+        
+        .offline-timer {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--heading-yellow);
+            margin: 1rem 0;
+            font-family: monospace;
+        }
+        
+        .offline-message {
+            color: var(--gray-500);
+            margin: 1.5rem 0;
+            line-height: 1.6;
+        }
+        
+        .offline-update {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-300);
+        }
+        
+        .refresh-btn {
+            background: var(--heading-yellow);
+            color: var(--bg-black);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 1rem 0;
+            width: 100%;
+            max-width: 200px;
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+            background: var(--accent-bright-yellow);
+        }
+        
+        .refresh-btn:active {
+            transform: translateY(0);
+        }
+        
+        .home-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: var(--gray-500);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+        
+        .home-link:hover {
+            color: var(--heading-yellow);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--alert-red);
+            margin-right: 0.5rem;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        
+        .eta-label {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-card">
+            <div class="offline-icon">🔴</div>
+            <h1 class="offline-title">System Offline</h1>
+            
+            <!-- Dynamic Content -->
+            <div class="offline-reason" id="reason">
+                <span class="status-indicator"></span>
+                Loading status...
+            </div>
+            
+            <div class="eta-label">Estimated Resolution</div>
+            <div class="offline-timer" id="timer">
+                --:--
+            </div>
+            
+            <p class="offline-message" id="message">
+                Our team has been notified and is working to restore service as quickly as possible.
+            </p>
+            
+            <button class="refresh-btn" onclick="checkStatus()">
+                Check Status
+            </button>
+            
+            <div class="offline-update" id="lastUpdate">
+                Last checked: just now
+            </div>
+            
+            <a href="/" class="home-link">← Return to Homepage</a>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+        // System status check function
+        async function checkStatus() {
+            const reasonEl = document.getElementById('reason');
+            const timerEl = document.getElementById('timer');
+            const messageEl = document.getElementById('message');
+            const updateEl = document.getElementById('lastUpdate');
+            
+            try {
+                const response = await fetch(
+                    `${CONFIG.APPS_SCRIPT_URL}?action=getSystemStatus&_=${Date.now()}`
+                );
+                const data = await response.json();
+                
+                if (data.status === 'ONLINE') {
+                    // System is back online - redirect to home
+                    window.location.href = '/';
+                } else {
+                    // Update offline information
+                    const reason = data.reason || 'Scheduled Maintenance';
+                    reasonEl.innerHTML = `<span class="status-indicator"></span>${reason}`;
+                    
+                    if (data.eta) {
+                        const eta = new Date(data.eta);
+                        const now = new Date();
+                        const diff = Math.max(0, eta - now);
+                        
+                        if (diff > 0) {
+                            const hours = Math.floor(diff / 3600000);
+                            const minutes = Math.floor((diff % 3600000) / 60000);
+                            timerEl.textContent = `${hours}h ${minutes}m remaining`;
+                        } else {
+                            timerEl.textContent = 'Any moment now';
+                        }
+                    } else {
+                        timerEl.textContent = 'Checking...';
+                    }
+                    
+                    // Custom message based on reason
+                    if (reason.toLowerCase().includes('maintenance')) {
+                        messageEl.textContent = 'We\'re performing scheduled maintenance to improve your experience. Thank you for your patience.';
+                    } else if (reason.toLowerCase().includes('issue')) {
+                        messageEl.textContent = 'We\'re experiencing technical difficulties and working to resolve them. We apologize for the inconvenience.';
+                    }
+                }
+            } catch (error) {
+                console.error('Status check failed:', error);
+                reasonEl.innerHTML = '<span class="status-indicator"></span>Unable to check status';
+                timerEl.textContent = '--:--';
+            }
+            
+            updateEl.textContent = `Last checked: ${new Date().toLocaleTimeString()}`;
+        }
+        
+        // Check immediately
+        checkStatus();
+        
+        // Check every 30 seconds
+        setInterval(checkStatus, 30000);
+        
+        // Auto-refresh when system comes back online
+        let refreshAttempts = 0;
+        const maxRefreshAttempts = 20; // Stop after 20 attempts (about 10 minutes)
+        
+        async function attemptRefresh() {
+            if (refreshAttempts >= maxRefreshAttempts) return;
+            
+            try {
+                const response = await fetch(
+                    `${CONFIG.APPS_SCRIPT_URL}?action=getSystemStatus&_=${Date.now()}`
+                );
+                const data = await response.json();
+                
+                if (data.status === 'ONLINE') {
+                    window.location.href = '/';
+                }
+                
+                refreshAttempts++;
+            } catch (error) {
+                console.log('Refresh check failed, will retry');
+            }
+        }
+        
+        // Try to refresh every 30 seconds
+        setInterval(attemptRefresh, 30000);
+    </script>
+</body>
+</html>
