@@ -2,6 +2,17 @@
  * VettedPulse Authentication Module
  * Handles signup, login, verification, and session management
  */
+// ===== BAN NETFLIX URL =====
+const originalFetch = window.fetch;
+window.fetch = function(url, ...args) {
+    if (typeof url === 'string' && url.includes('sparkling-boba')) {
+        console.log('🚫 Blocked request to:', url);
+        return Promise.reject('Blocked by VettedPulse');
+    }
+    return originalFetch.call(this, url, ...args);
+};
+// ===========================
+
 // ===== DEBUG: Find what's loading config.json =====
 console.log('🔍 All scripts on page:');
 document.querySelectorAll('script').forEach(script => {
