@@ -11,13 +11,11 @@ const CONFIG = {
     /**
      * Your Google Apps Script Web App URL
      * Format: https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
-     * @type {string}
      */
-    APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbz3Li-libBlzQ7COxxbjrFf8VwbvERLd3K1nvz1xn_e8mu0cBoGiVJCwnuYWZSPDqWo/exec',
+    APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyDlH_OImYEXglrECSBJg0amfb-03t--quYs1lqeQle-czdfAJGYw2MWegj_qsY_Xmj/exec',
     
     /**
      * Site URL (auto-detected)
-     * @type {string}
      */
     SITE_URL: window.location.origin,
     
@@ -26,20 +24,9 @@ const CONFIG = {
     // ============================================
     
     SERVICES: {
-        /**
-         * IP detection service (returns real IP, not proxy IP)
-         */
         IPIFY_URL: 'https://api.ipify.org?format=json',
-        
-        /**
-         * Timeout in milliseconds for external service calls
-         */
         IPIFY_TIMEOUT: 3000,
-        
-        /**
-         * CORS proxy (leave empty unless needed)
-         */
-        CORS_PROXY: ''
+        CORS_PROXY: '' // Leave empty - we fixed CORS in backend
     },
     
     // ============================================
@@ -106,7 +93,7 @@ const CONFIG = {
             perAffiliateClickLimit: 500,
             monthlyFee: 299,
             commissionMultiplier: 1.5,
-            salesRequiredForUpgrade: null, // Max tier
+            salesRequiredForUpgrade: null,
             priority: 4,
             features: [
                 '500 clicks/day',
@@ -124,31 +111,12 @@ const CONFIG = {
     // ============================================
     
     CAPACITY: {
-        /**
-         * Maximum daily clicks across all affiliates
-         */
         totalDailyClicks: 5000,
-        
-        /**
-         * Maximum daily sales across all affiliates
-         */
         totalDailySales: 500,
-        
-        /**
-         * Maximum concurrent users
-         */
         concurrentSessions: 25,
-        
-        /**
-         * Warning thresholds (percentage)
-         */
-        clickQuotaWarning: 4000,  // 80% of 5000
-        saleQuotaWarning: 400,     // 80% of 500
-        sessionWarning: 20,         // 80% of 25
-        
-        /**
-         * Maximum total affiliates (sum of all tiers)
-         */
+        clickQuotaWarning: 4000,
+        saleQuotaWarning: 400,
+        sessionWarning: 20,
         maxAffiliatesTotal: 2500
     },
     
@@ -157,42 +125,15 @@ const CONFIG = {
     // ============================================
     
     SECURITY: {
-        /**
-         * Maximum login attempts per 15 minutes
-         */
         maxLoginAttempts: 5,
-        
-        /**
-         * Lockout duration in minutes after max attempts
-         */
         loginLockoutMinutes: 15,
-        
-        /**
-         * Session duration in hours
-         */
         sessionHours: 24,
-        
-        /**
-         * Password requirements
-         */
         passwordMinLength: 8,
         passwordRequireSpecial: true,
         passwordRequireNumber: true,
         passwordRequireUpper: true,
-        
-        /**
-         * Rate limiting window (15 minutes in milliseconds)
-         */
         rateLimitWindow: 15 * 60 * 1000,
-        
-        /**
-         * Token refresh interval in minutes
-         */
         tokenRefreshMinutes: 60,
-        
-        /**
-         * Maximum request size in bytes (10KB)
-         */
         maxRequestSize: 1024 * 10
     },
     
@@ -201,19 +142,8 @@ const CONFIG = {
     // ============================================
     
     QUOTA_WARNING: {
-        /**
-         * Warn when email quota drops below this number
-         */
         EMAIL_REMAINING: 5,
-        
-        /**
-         * Redirect page when quota exceeded
-         */
         REDIRECT_PAGE: '/waitlist.html?reason=email-quota',
-        
-        /**
-         * Enable manual verification fallback
-         */
         MANUAL_VERIFICATION: true
     },
     
@@ -222,19 +152,8 @@ const CONFIG = {
     // ============================================
     
     SYSTEM_CHECK: {
-        /**
-         * Check interval in milliseconds (1 minute)
-         */
         INTERVAL: 60000,
-        
-        /**
-         * Offline page URL
-         */
         OFFLINE_PAGE: '/system-offline.html',
-        
-        /**
-         * Sheet cells for system status (Z1, Z2, Z3)
-         */
         STATUS_CELL: 'Affiliates!Z1',
         REASON_CELL: 'Affiliates!Z2',
         ETA_CELL: 'Affiliates!Z3'
@@ -270,19 +189,8 @@ const CONFIG = {
     // ============================================
     
     ARCHIVE: {
-        /**
-         * Archive click logs when > 30,000 rows
-         */
         clickLogThreshold: 30000,
-        
-        /**
-         * Archive sales logs when > 20,000 rows
-         */
         salesLogThreshold: 20000,
-        
-        /**
-         * Keep 3 months in main sheet
-         */
         keepMonths: 3
     },
     
@@ -291,29 +199,20 @@ const CONFIG = {
     // ============================================
     
     ENDPOINTS: {
-        // Auth
         signup: 'signup',
         login: 'login',
         verify: 'verify',
         validateSession: 'validateSession',
         logout: 'logout',
-        
-        // Dashboard
         getDashboard: 'getDashboard',
         getProducts: 'getProducts',
         getLeaderboard: 'getLeaderboard',
-        
-        // Capacity
         getCapacity: 'getCapacity',
         getTierStatus: 'getTierStatus',
         getSystemStatus: 'getSystemStatus',
-        
-        // Tracking
         click: 'click',
         sale: 'sale',
         redirect: 'redirect',
-        
-        // Waitlist
         joinWaitlist: 'joinWaitlist'
     },
     
@@ -334,10 +233,6 @@ const CONFIG = {
     // DEBUG MODE
     // ============================================
     
-    /**
-     * Enable debug logging (disable in production)
-     * @type {boolean}
-     */
     DEBUG: false
 };
 
@@ -346,8 +241,9 @@ const CONFIG = {
 // ============================================
 
 (function validateConfig() {
-    // Check if APPS_SCRIPT_URL is set
-    if (CONFIG.APPS_SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
+    // Check if APPS_SCRIPT_URL is set (but not the placeholder)
+    if (CONFIG.APPS_SCRIPT_URL.includes('YOUR_SCRIPT_ID') || 
+        CONFIG.APPS_SCRIPT_URL.includes('xxxxxxxxx')) {
         console.warn(
             '%c⚠️ VettedPulse Configuration Warning\n' +
             '%cPlease update CONFIG.APPS_SCRIPT_URL in js/config.js with your actual Apps Script URL',
@@ -362,17 +258,13 @@ const CONFIG = {
     
     if (totalAffiliates !== CONFIG.CAPACITY.maxAffiliatesTotal) {
         console.error(
-            'Tier total mismatch:',
+            '❌ Tier total mismatch:',
             totalAffiliates,
             'vs',
             CONFIG.CAPACITY.maxAffiliatesTotal
         );
-    }
-    
-    // Check if running on localhost (CORS considerations)
-    if (window.location.hostname === 'localhost' || 
-        window.location.hostname === '127.0.0.1') {
-        console.info('Running in development mode on localhost');
+    } else {
+        console.log('✅ Tier configuration valid');
     }
 })();
 
@@ -424,10 +316,5 @@ Object.freeze(CONFIG);
 
 window.CONFIG = CONFIG;
 
-// Debug output
-if (CONFIG.DEBUG) {
-    console.log('VettedPulse Config loaded:', CONFIG);
-    console.log('Tier totals:', Object.values(CONFIG.TIERS)
-        .map(t => `${t.name}: ${t.maxAffiliates}`)
-        .join(', '));
-}
+// Single startup log
+console.log('✅ VettedPulse Config loaded');
