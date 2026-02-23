@@ -2,7 +2,8 @@
  * VettedPulse Authentication Module
  * Handles signup, login, verification, and session management
  */
-// ===== BAN NETFLIX URL =====
+
+// ===== BLOCK OLD NETLIFY REQUESTS =====
 const originalFetch = window.fetch;
 window.fetch = function(url, ...args) {
     if (typeof url === 'string' && url.includes('sparkling-boba')) {
@@ -11,37 +12,8 @@ window.fetch = function(url, ...args) {
     }
     return originalFetch.call(this, url, ...args);
 };
-// ===========================
 
-// ===== DEBUG: Find what's loading config.json =====
-console.log('🔍 All scripts on page:');
-document.querySelectorAll('script').forEach(script => {
-    if (script.src) {
-        console.log('  📜 Script:', script.src);
-    } else if (script.textContent.includes('config.json')) {
-        console.log('  ⚠️ Inline script contains config.json:', script.textContent.substring(0, 100));
-    }
-});
-
-// Monitor all network requests
-const observer = new PerformanceObserver((list) => {
-    list.getEntries().forEach(entry => {
-        if (entry.name.includes('config.json')) {
-            console.log('🚨 config.json requested by:', entry.initiatorType, entry.name);
-            console.trace('Trace:');
-        }
-    });
-});
-observer.observe({ entryTypes: ['resource'] });
-// ===== DEBUG: Track all network requests =====
-const originalFetch = window.fetch;
-window.fetch = function(...args) {
-    console.log('🌐 FETCH REQUEST:', args[0]);
-    return originalFetch.apply(this, args);
-};
-
-console.log('🔍 DEBUG: Auth.js loaded');
-console.log('🔍 Current origin:', window.location.origin);
+console.log('🔍 Auth.js loaded');
 console.log('🔍 APPS_SCRIPT_URL:', CONFIG?.APPS_SCRIPT_URL || 'CONFIG not loaded yet');
 
 class Auth {
@@ -89,7 +61,7 @@ class Auth {
         // Start periodic system status checks
         setInterval(() => this.checkSystemStatus(), CONFIG.SYSTEM_CHECK.INTERVAL);
         
-        console.log('Auth module initialized');
+        console.log('✅ Auth module initialized');
     }
     
     // ============================================
@@ -595,8 +567,6 @@ class Auth {
      * @returns {string} - Hashed password
      */
     hashPassword(password) {
-        // This is just for transmission - actual hashing in backend
-        // DO NOT use for actual security
         return btoa(password);
     }
     
@@ -619,7 +589,6 @@ class Auth {
             </div>
         `;
         
-        // Auto-hide success messages after 5 seconds
         if (type === 'success') {
             setTimeout(() => {
                 container.innerHTML = '';
@@ -637,7 +606,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================
-// EXPORT FOR GLOBAL USE
+// GLOBAL LOGOUT FUNCTION
 // ============================================
 
 window.logout = () => {
