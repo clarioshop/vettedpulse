@@ -93,53 +93,25 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
+    <!-- Scripts - ORDER MATTERS! -->
     <script src="js/config.js"></script>
     <script src="js/utils/sanitizer.js"></script>
     <script src="js/utils/validator.js"></script>
     <script src="js/utils/clientData.js"></script>
     <script src="js/auth.js"></script>
+    
+    <!-- Simple diagnostic - REMOVE after testing -->
     <script>
-// SUPER SIMPLE DIAGNOSTIC
-console.log('🔍 DIAGNOSTIC START');
-
-// Check if each file loaded
-console.log('CONFIG loaded:', typeof CONFIG !== 'undefined');
-console.log('Sanitizer loaded:', typeof Sanitizer !== 'undefined');
-console.log('Validator loaded:', typeof Validator !== 'undefined');
-console.log('ClientData loaded:', typeof ClientData !== 'undefined');
-console.log('Auth loaded:', typeof Auth !== 'undefined');
-
-// Test basic function
-if (typeof CONFIG !== 'undefined') {
-    console.log('✅ CONFIG.APPS_SCRIPT_URL:', CONFIG.APPS_SCRIPT_URL);
-}
-
-// Test if form exists
-const form = document.getElementById('loginForm');
-console.log('Login form found:', form !== null);
-
-// Add simple test handler
-if (form) {
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        console.log('✅ TEST: Form submit intercepted!');
-        alert('Form is working! Now we need to find why auth.js is not working.');
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('✅ Page loaded');
+        console.log('Auth available:', typeof Auth !== 'undefined');
+        console.log('CONFIG loaded:', typeof CONFIG !== 'undefined');
+        
+        // Check if auth.js initialized
+        setTimeout(() => {
+            console.log('Auth instance:', window.auth ? '✅ Created' : '❌ Not created');
+        }, 500);
     });
-}
-</script>
-    <script>
-console.log('🔍 Checking script loading:');
-console.log('- config.js:', typeof CONFIG !== 'undefined' ? '✅' : '❌');
-console.log('- sanitizer.js:', typeof Sanitizer !== 'undefined' ? '✅' : '❌');
-console.log('- validator.js:', typeof Validator !== 'undefined' ? '✅' : '❌');
-console.log('- clientData.js:', typeof ClientData !== 'undefined' ? '✅' : '❌');
-console.log('- auth.js:', typeof Auth !== 'undefined' ? '✅' : '❌');
-
-// If auth.js is missing, show the error
-if (typeof Auth === 'undefined') {
-    console.error('❌ auth.js failed to load! Check the file path and content');
-}
-</script>
+    </script>
 </body>
 </html>
