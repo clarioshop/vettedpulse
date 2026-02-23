@@ -128,5 +128,18 @@ if (form) {
     });
 }
 </script>
+    <script>
+console.log('🔍 Checking script loading:');
+console.log('- config.js:', typeof CONFIG !== 'undefined' ? '✅' : '❌');
+console.log('- sanitizer.js:', typeof Sanitizer !== 'undefined' ? '✅' : '❌');
+console.log('- validator.js:', typeof Validator !== 'undefined' ? '✅' : '❌');
+console.log('- clientData.js:', typeof ClientData !== 'undefined' ? '✅' : '❌');
+console.log('- auth.js:', typeof Auth !== 'undefined' ? '✅' : '❌');
+
+// If auth.js is missing, show the error
+if (typeof Auth === 'undefined') {
+    console.error('❌ auth.js failed to load! Check the file path and content');
+}
+</script>
 </body>
 </html>
